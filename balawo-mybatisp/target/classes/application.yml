@@ -1,0 +1,43 @@
+server:
+  port: 9010
+
+spring:
+  application:
+    name: balawo-mybatisp
+  datasource:
+    name: druidDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://rm-2zefzzv3s8d74dyfvho.pg.rds.aliyuncs.com:3432/demo
+    type: com.alibaba.druid.pool.DruidDataSource
+    username:  aranya_staging #\u7528\u6237\u540D
+    password: e23TsmZasGyEAqd2018 #\u5BC6\u7801
+    druid:
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 30000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select '1' from dual
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      max-pool-prepared-statement-per-connection-size: 20
+  logging:
+    level:
+      web: debug #打印请求日志
+      org.zalando.logbook: debug #logbook日志记录器必须配置为trace才能记录请求和响应参数.
+      com.baomidou.mybatisplus.samples: debug
+    file:
+      path: log #输出的日志文件
+
+mybatis-plus:
+  #  mapper-locations: classpath*:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.atguitu.springcloud.entity
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #\u67E5\u8BE2sql\u65E5\u5FD7\u663E\u793A\u5728\u63A7\u5236\u53F0,\u8FD9\u4E2A\u662F\u53EF\u4EE5sql\u3001\u53C2\u6570\u3001\u67E5\u8BE2\u7ED3\u679C\u7684
+  table:
+    auto: update
