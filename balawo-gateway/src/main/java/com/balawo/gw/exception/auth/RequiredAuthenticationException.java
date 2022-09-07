@@ -1,4 +1,4 @@
-package com.balawo.gw.exception;
+package com.balawo.gw.exception.auth;
 
 /**
  * @author yan
@@ -6,6 +6,6 @@ package com.balawo.gw.exception;
  */
 public class RequiredAuthenticationException extends RuntimeException {
     public RequiredAuthenticationException(String msg){
-        super(msg);
+//        super(msg);
     }
 }

@@ -1,29 +1,21 @@
 package com.balawo.gw.config;
 
-import com.balawo.gw.exception.RequiredAuthenticationException;
-import com.balawo.gw.exception.RequiredPermissionException;
+import com.balawo.gw.exception.auth.RequiredAuthenticationException;
+import com.balawo.gw.exception.auth.RequiredPermissionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.ReactiveAuthorizationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
-import org.springframework.stereotype.Component;
-import org.springframework.util.AntPathMatcher;
-import org.springframework.util.PathMatcher;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author yan
@@ -31,7 +23,7 @@ import java.util.Map;
  * 自定义授权管理器，判断用户是否有权限访问
  *
  * 此处我们简单判断
- * 1、放行所有的 OPTION 请求。
+ * 1、判断token令牌是否有效
  * 2、判断某个请求(url)用户是否有权限访问。
  * 3、所有不存在的请求(url)直接无权限访问。
  * ReactiveAuthorizationManager<AuthorizationContext>
@@ -39,10 +31,8 @@ import java.util.Map;
 
 public class AuthorizationManager implements ReactiveAuthorizationManager<AuthorizationContext> {
     private final String RESOURCE_ID = "admin";
-
     TokenStore tokenStore;
     private List<String> scopes = new ArrayList<>();
-    private static final Map<String, String> AUTH_MAP = new HashMap<>();
 
 
     public AuthorizationManager(TokenStore tokenStore, String scope, String... scopes) {
@@ -63,6 +53,7 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         ServerWebExchange exchange = authorizationContext.getExchange();
         ServerHttpRequest request =  exchange.getRequest();
         List<String> authHeader = request.getHeaders().get("Authorization");
+
         if(authHeader == null) {
             throw new RequiredAuthenticationException(msgBadCredentials);
         }
@@ -70,30 +61,38 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
         if(StringUtils.isEmpty(token)){
             throw new RequiredAuthenticationException(msgBadCredentials);
         }
+        //获取前端传来的token
         token = token.replace("bearer","").trim();
+        //根据token查询tokenStore（redis存储）中对应的权限
         OAuth2Authentication auth = tokenStore.readAuthentication(token);
+
         logger.info("访问的token:[{}],拥有的权限:[{}]",token,auth);
-
-
-
         String path = request.getURI().getPath();
-        //带通配符的可以使用这个进行匹配
-        PathMatcher pathMatcher = new AntPathMatcher();
-        String authorities = AUTH_MAP.get(path);
-        logger.info("访问路径:[{}],所需要的权限是:[{}]", path, authorities);
+        logger.info("访问路径:[{}],所需要的权限是:[{}]", path, this.scopes);
 
 
-
-        // option 请求，全部放行
-        if (request.getMethod() == HttpMethod.OPTIONS) {
-            return Mono.just(new AuthorizationDecision(true));
-        }
-        // 不在权限范围内的url，全部拒绝
-        if (!StringUtils.hasText(authorities)) {
-            return Mono.just(new AuthorizationDecision(false));
+        if(auth == null){
+            //没有权限，则拒绝访问
+            throw new RequiredPermissionException("没有权限。。。");
+//            return Mono.just(new AuthorizationDecision(false));
         }
 
-        return Mono.just(new AuthorizationDecision(true));
+        Collection<String> resourceIds = auth.getOAuth2Request().getResourceIds();
+        if(resourceIds != null && !resourceIds.isEmpty() && !resourceIds.contains(RESOURCE_ID)){
+            //没有admin的权限，则拒绝访问
+            throw new RequiredAuthenticationException(msgBadCredentials);
+        }
+
+        //获取当前用户拥有的权限
+        Set<String> clientScopes = auth.getOAuth2Request().getScope();
+        for(String scope : this.scopes){
+            if(clientScopes.contains(scope)){
+                //有此权限 可以访问
+                return Mono.just(new AuthorizationDecision(true));
+            }
+        }
+
+        return Mono.just(new AuthorizationDecision(false));
     }
 
     @Override

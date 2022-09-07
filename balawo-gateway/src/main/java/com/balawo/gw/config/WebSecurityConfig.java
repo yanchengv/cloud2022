@@ -1,7 +1,8 @@
 package com.balawo.gw.config;
 
-import com.balawo.gw.exception.RequiredPermissionException;
-import com.balawo.gw.exception.RestAuthenticationEntryPoint;
+import com.balawo.gw.exception.auth.RequiredPermissionException;
+import com.balawo.gw.exception.auth.RestAuthenticationEntryPoint;
+import com.balawo.gw.exception.auth.RestfulAccessDeniedHandler;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @Slf4j
 public class WebSecurityConfig {
 
-    private final RequiredPermissionException customServerAccessDeniedHandler;
+    private final RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     private final TokenStore tokenStore; //令牌存储，放在redis中
@@ -46,13 +47,13 @@ public class WebSecurityConfig {
 //                .pathMatchers("/auth/**", "/favicon.ico").permitAll()
 
                 // 权限认证：不同接口访问权限不同
-                //使用AuthorizationManager方法校验当前的用户token是否合法并且是否有API_CUSTOMER权限，如果有才能访问/demo1/mp/users/*
-                .pathMatchers("/demo1/mp/users/*").access(new AuthorizationManager(tokenStore, "API_CUSTOMER"))
+                //使用AuthorizationManager方法校验当前的用户token是否合法并且是否有ALL_ADMIN权限，如果有才能访问/demo1/mp/users/*
+                .pathMatchers("/demo1/mp/users/*").access(new AuthorizationManager(tokenStore, "ALL_ADMIN"))
 //                .pathMatchers("/demo1/mp/tags/*").access(new AuthorizationManager(tokenStore, "API_CUSTOMER"))
                 .anyExchange().permitAll()
                 .and().exceptionHandling()
                 //没有权限和token未认证的处理
-                .accessDeniedHandler(customServerAccessDeniedHandler) //处理未授权
+                .accessDeniedHandler(restfulAccessDeniedHandler) //处理未授权
                 .authenticationEntryPoint(restAuthenticationEntryPoint)//处理未认证
                 .and().csrf().disable();
         return http.build();
