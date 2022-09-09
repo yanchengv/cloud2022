@@ -10,6 +10,7 @@
     <modules>
         <module>balawo-mybatisp</module>
         <module>balawo-gateway</module>
+        <module>balawo-oauth</module>
     </modules>
     <packaging>pom</packaging>
 
