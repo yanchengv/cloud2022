@@ -1,37 +1,32 @@
-package com.balawo.gw.modle;
+package com.balawo.oauth.model;
 
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * @author yan
- * @date 2022-09-09
+ * @date 2022-09-13
  */
-@Data
-public class UserPrincipal implements UserDetails {
-    /**
-     * 权限标识
-     */
-    private List<GrantedAuthority> authorities;
 
-//    public static UserPrincipal build() {
-//        List<GrantedAuthority> authorities = new ArrayList<>();
-//        return new UserPrincipal(1, "yan", 1, authorities);
-//    }
+@Data
+public class LoginUser implements UserDetails {
+
+    private static final long serialVersionUID = 1L;
+    private String realName;
+    private String mobile;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return "123";
+        return null;
     }
 
     @Override

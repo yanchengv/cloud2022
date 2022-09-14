@@ -1,4 +1,4 @@
-package com.balawo.oauth2;
+package com.balawo.oauth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.balawo.oauth2.controllers;
+package com.balawo.oauth.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
