@@ -7,10 +7,10 @@ spring:
   datasource:
     name: druidDataSource
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://rm-xx.pg.rds.aliyuncs.com:3432/demo
+    url: jdbc:postgresql://rm-2zefzzv3s8d74dyfvho.pg.rds.aliyuncs.com:3432/demo
     type: com.alibaba.druid.pool.DruidDataSource
-    username:  staging #\u7528\u6237\u540D
-    password: e23TsGyEAqd2018 #\u5BC6\u7801
+    username:  aranya_staging #\u7528\u6237\u540D
+    password: e23TsmZasGyEAqd2018 #\u5BC6\u7801
     druid:
       initial-size: 5
       min-idle: 5
