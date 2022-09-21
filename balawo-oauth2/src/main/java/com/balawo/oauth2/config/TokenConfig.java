@@ -1,4 +1,4 @@
-package com.balawo.oauth.config;
+package com.balawo.oauth2.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,10 +9,8 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 
 /**
  * @author yan
- * @date 2022-09-13
- * token 存储方式
+ * @date 2022-09-21
  */
-
 @Configuration
 public class TokenConfig {
     @Autowired

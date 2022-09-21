@@ -1,33 +1,24 @@
-package com.balawo.oauth.model;
+package com.balawo.oauth2.model;
 
-import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author yan
- * @date 2022-09-13
+ * @date 2022-09-20
  */
+public class User implements UserDetails {
 
-@Data
-public class LoginUser implements UserDetails {
+    private String username;
+    private String password;
+    private List<GrantedAuthority> authorities;
 
-    private static final long serialVersionUID = 1L;
-    private String loginName;
-    private String loginPassword;
-    private String mobile;
-    private  Collection<GrantedAuthority> authorities;
-
-    public LoginUser(String loginName, String loginPassword, String mobile, Collection<GrantedAuthority> authorities) {
-        this.loginName = loginName;
-        this.loginPassword = loginPassword;
-        this.mobile = mobile;
+    public User(String username, String password, List<GrantedAuthority> authorities) {
+        this.username = username;
+        this.password = password;
         this.authorities = authorities;
     }
 
@@ -38,12 +29,12 @@ public class LoginUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return loginPassword;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return mobile;
+        return username;
     }
 
     @Override
