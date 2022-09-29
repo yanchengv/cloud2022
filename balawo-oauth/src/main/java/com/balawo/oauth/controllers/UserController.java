@@ -1,6 +1,7 @@
 package com.balawo.oauth.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,8 @@ public class UserController {
 
     @GetMapping("/admin")
     //@PreAuthorize("hasAnyRole('ROLE_admin')")
-    @PreAuthorize("hasAnyAuthority('admin')")
-    public String admin(){
-        return "admin role";
+    @PreAuthorize("hasAnyAuthority('read_auth')")
+    public Object admin(Authentication authentication){
+        return authentication.getPrincipal();
     }
 }

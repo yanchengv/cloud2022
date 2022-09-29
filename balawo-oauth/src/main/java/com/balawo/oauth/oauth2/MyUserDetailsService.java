@@ -39,9 +39,10 @@ public class MyUserDetailsService implements UserDetailsService {
 ////        SimpleGrantedAuthority s = new SimpleGrantedAuthority("admin");
 ////        authorities.add(s);
 //        loginUser.setAuthorities(AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
-        return new LoginUser(username,new BCryptPasswordEncoder().encode("p1"),"110",AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
-        //return new User("u1",new BCryptPasswordEncoder().encode("p1"),
-        //        AuthorityUtils.commaSeparatedStringToAuthorityList("admin,ROLE_admin"));
+//        return new LoginUser(username,new BCryptPasswordEncoder().encode("p1"),"110",AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
+        return new User("u1",new BCryptPasswordEncoder().encode("p1"),
+                AuthorityUtils.commaSeparatedStringToAuthorityList("admin,update_auth,read_auth"));
+
     }
 
 

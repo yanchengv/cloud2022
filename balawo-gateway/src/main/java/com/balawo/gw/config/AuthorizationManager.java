@@ -62,19 +62,23 @@ public class AuthorizationManager implements ReactiveAuthorizationManager<Author
             throw new RequiredAuthenticationException(msgBadCredentials);
         }
         //获取前端传来的token
-        token = token.replace("bearer","").trim();
+        token = token.replace("Bearer","").trim();
+        logger.info("访问的token:{}",token);
         //根据token查询tokenStore（redis存储）中对应的权限
         OAuth2Authentication auth = tokenStore.readAuthentication(token);
+//        Object auth = tokenStore.readAuthentication(token);
 
-        logger.info("访问的token:[{}],拥有的权限:[{}]",token,auth);
+        logger.info("访问的token:{},拥有的scope权限:{}",token,auth.getOAuth2Request().getScope());
         String path = request.getURI().getPath();
-        logger.info("访问路径:[{}],所需要的权限是:[{}]", path, this.scopes);
+        logger.info("访问路径:{},所需要的scope权限是:{}", path, this.scopes);
 
+        logger.info("当前登录的用户:{}", auth.getPrincipal());
+        logger.info("当前用户的authorities:{}", auth.getAuthorities());
 
         if(auth == null){
             //没有权限，则拒绝访问
-            throw new RequiredPermissionException("没有权限。。。");
-//            return Mono.just(new AuthorizationDecision(false));
+//            throw new RequiredPermissionException("没有权限。。。");
+            return Mono.just(new AuthorizationDecision(false));
         }
 
         Collection<String> resourceIds = auth.getOAuth2Request().getResourceIds();

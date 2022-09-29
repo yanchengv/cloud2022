@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022-09-21
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     @RequestMapping("/getCurrentUser")
-    @PreAuthorize("hasAnyAuthority('admin')")
+    @PreAuthorize("hasAnyAuthority('read_auth')")
     public Object getCurrentUser(Authentication authentication){
         return authentication.getPrincipal();
     }

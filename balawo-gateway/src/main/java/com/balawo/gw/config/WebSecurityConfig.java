@@ -53,7 +53,10 @@ public class WebSecurityConfig {
 //                .pathMatchers("/auth/**", "/favicon.ico").permitAll()
                 // 权限认证：不同接口访问权限不同
                 //使用AuthorizationManager方法校验当前的用户token是否合法并且是否有ALL_ADMIN权限，如果有才能访问/demo1/mp/users/*
-                .pathMatchers("/demo1/mp/users/*").access(new AuthorizationManager(tokenStore, "ALL_ADMIN"))
+                .pathMatchers("/demo1/mp/users/*").access(new AuthorizationManager(tokenStore, "all"))
+                .pathMatchers("/demo2/users/*").access(new AuthorizationManager(tokenStore, "all"))
+                .pathMatchers("/demo3/users/*").access(new AuthorizationManager(tokenStore, "all"))
+                .pathMatchers("/demo5/users/*").access(new AuthorizationManager(tokenStore, "all"))
                 //.pathMatchers("/demo1/mp/tags/*").access(new AuthorizationManager(tokenStore, "API_CUSTOMER"))
                 .anyExchange().permitAll()
                 .and().exceptionHandling()

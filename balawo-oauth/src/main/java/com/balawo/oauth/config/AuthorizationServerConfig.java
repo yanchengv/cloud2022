@@ -107,6 +107,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     }
 
+
     /**
      * 令牌服务的配置
      */

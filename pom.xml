@@ -11,6 +11,9 @@
         <module>balawo-mybatisp</module>
         <module>balawo-gateway</module>
         <module>balawo-oauth</module>
+        <module>balawo-oauth2</module>
+        <module>balawo-oauth2jwt</module>
+        <module>balawo-demo5</module>
     </modules>
     <packaging>pom</packaging>
 

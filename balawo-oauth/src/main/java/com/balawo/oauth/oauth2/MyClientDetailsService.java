@@ -38,13 +38,14 @@ public class MyClientDetailsService implements ClientDetailsService {
         //客户端秘钥
         clientDetails.setClientSecret(new BCryptPasswordEncoder().encode("client_secret1"));
         //发出去的权限有哪些?之前前端请求携带了scope,此配置的scope用来指定前端发送scope的值必须在配置的里面或者不携带scope;默认为此处配置的scope
-        clientDetails.setScope(Arrays.asList("all",","));
+        clientDetails.setScope(Arrays.asList("all"));
         //针对当前应用客户端：client_id1,所能支持的授权模式是哪些?总共5种(授权码模式：authorization_code;密码模式：password;客户端模式：client_credentials;简化模式：implicit;令牌刷新：refresh_token)。
 //        clientDetails.setAuthorizedGrantTypes(Arrays.asList("authorization_code,client_credentials,refresh_token,password",","));
         Set<String> authType = new HashSet<>();
         authType.add("password");
         authType.add("refresh_token");
         clientDetails.setAuthorizedGrantTypes(authType);
+        clientDetails.setResourceIds(Arrays.asList("admin"));
         //资源ID 唯一 比如订单服务作为一个资源，可以设置多个
 //        clientDetails.setResourceIds(Arrays.asList("admin"));
 
