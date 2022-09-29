@@ -1,0 +1,29 @@
+server:
+  port: 9005
+
+
+spring:
+  application:
+    name: balawo-demo5
+  redis:
+    database: 0
+    host: localhost #加入哨兵后，此项可以不配置
+    port: 6379
+    password:  # 密码（默认为空）
+    timeout: 6000  # 连接超时时长（毫秒）
+    lettuce:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
+
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  #  file: /data/logs/any-customer/any-customer.log  # 日志文件,绝对路径或相对路径
+  #  path: /data/logs/any-customer/  # 保存日志文件目录路径
+#  config: classpath:logback-spring.xml # 日志配置文件,Spring Boot默认使用classpath路径下的日志配置文件,如:logback-prod.xml
+  level:  # 日志级别
+    root: INFO #
